@@ -1,0 +1,64 @@
+<template>
+  <view class="school-page">
+    <u-list :height="screenHeight-100">
+      <u-list-item v-for="(item, index) in listData" :key="index">
+        <u-cell :title="item.name">
+        </u-cell>
+      </u-list-item>
+    </u-list>
+    <view class="footer">
+      <u-button text="创建" type="primary" @click="handleCreate"></u-button>
+
+    </view>
+  </view>
+</template>
+
+<script>
+  import {
+    mapState
+  } from 'vuex'
+
+  export default {
+    data() {
+      return {
+        listData: []
+      }
+    },
+    computed: {
+      ...mapState(['screenHeight']),
+    },
+    onShow() {
+      this.fetchSchoolList()
+    },
+    methods: {
+      fetchSchoolList() {
+        uni.request({
+          url: 'https://www.zhchhong.shop/api/school/school-list',
+          method: 'GET',
+          success: ({
+            data
+          }) => {
+            this.listData = data
+          }
+        })
+      },
+
+      handleCreate() {
+        uni.redirectTo({
+          url: "/pages/amap/index"
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  .school-page {
+    .footer {
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+</style>

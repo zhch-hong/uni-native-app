@@ -1,0 +1,15 @@
+<script>
+  export default {
+    onLoad() {
+      uni.getSystemInfo({
+        success: (sys) => {
+          this.$store.commit('setScreenWidth', sys.screenWidth)
+          this.$store.commit('setScreenHeight', sys.screenHeight)
+          uni.reLaunch({
+            url: '/pages/amap/index'
+          })
+        }
+      })
+    },
+  }
+</script>

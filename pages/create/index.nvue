@@ -1,0 +1,89 @@
+<template>
+  <view class="create-page">
+    <u--form labelPosition="top" :labelWidth="200">
+      <u-form-item label="街道(乡镇)">
+        <u--input v-model="form.streetCode"></u--input>
+      </u-form-item>
+      <u-form-item label="幼儿园名称">
+        <u--input v-model="form.name"></u--input>
+      </u-form-item>
+
+      <u-form-item label="详细地址">
+        <u--input v-model="form.address"></u--input>
+      </u-form-item>
+
+      <u-form-item label="幼儿园咨询电话">
+        <u--input v-model="form.phone"></u--input>
+      </u-form-item>
+
+      <u-form-item label="办园性质">
+        <u--input v-model="form.type"></u--input>
+      </u-form-item>
+
+      <u-form-item label="办园等级(最高等级)">
+        <u--input v-model="form.level"></u--input>
+      </u-form-item>
+
+    </u--form>
+
+    <u-button class="active-btn" text="取消" @click="handleCancel"></u-button>
+    <u-button class="active-btn" text="保存" type="primary" @click="handleSubmit"></u-button>
+  </view>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        form: {
+          name: '',
+          streetCode: '510114008',
+          address: '',
+          phone: '',
+          type: '',
+          level: '',
+          latitude: 0,
+          longitude: 0
+        }
+      }
+    },
+    onLoad(options) {
+      this.setFormModel(JSON.parse(decodeURIComponent(options.location)))
+    },
+    methods: {
+      setFormModel(data) {
+        this.form.name = data.name
+        this.form.address = data.address
+        this.form.latitude = data.latitude
+        this.form.longitude = data.longitude
+      },
+      handleCancel() {
+        uni.redirectTo({
+          url: '/pages/amap/index'
+        })
+      },
+      handleSubmit() {
+        uni.request({
+          url: 'https://www.zhchhong.shop/api/school/create-school',
+          method: 'POST',
+          data: this.form,
+          success: () => {
+            uni.redirectTo({
+              url: "/pages/school/index"
+            })
+          }
+        })
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+  .create-page {
+    margin: 20px;
+
+    .active-btn {
+      margin-top: 30px;
+    }
+  }
+</style>

@@ -1,0 +1,173 @@
+<template>
+  <view>
+    <view class="fixed-icon search-icon" @click="handleChooseLocation">
+      <u-icon name="search" color="#333" label="搜索学校" labelPos="bottom" labelColor="#333" :labelSize="12" :size="24"
+        :bold="true"></u-icon>
+    </view>
+    <view class="fixed-icon list-icon" @click="handleSchoolList">
+      <u-icon name="list" color="#333" label="学校列表" labelPos="bottom" labelColor="#333" :labelSize="12" :size="24"
+        :bold="true"></u-icon>
+    </view>
+    <view class="fixed-icon home-icon" @click="handleHomeLocation">
+      <u-icon name="home" color="#333" label="家庭位置" labelPos="bottom" labelColor="#333" :labelSize="12" :size="24"
+        :bold="true"></u-icon>
+    </view>
+    <view class="fixed-icon location-icon" @click="handleCurrentLocation">
+      <u-icon name="map" color="#333" label="当前位置" labelPos="bottom" labelColor="#333" :labelSize="12" :size="24"
+        :bold="true"></u-icon>
+    </view>
+    <view class="fixed-icon markers-switch">
+      <u-switch v-model="isShowSchoolMarkers" @change="onShowSchoolMarkersChange"></u-switch>
+    </view>
+    <map id="zchMap" :style="'width:'+screenWidth+'px;height:'+screenHeight+'px;'" :latitude="latitude"
+      :longitude="longitude" :markers="markers" :show-location="true"></map>
+  </view>
+</template>
+
+<script>
+  import {
+    mapState
+  } from 'vuex'
+
+  const mapSearch = weex.requireModule('mapSearch')
+
+  export default {
+    data() {
+      return {
+        mapContext: null,
+        latitude: 0,
+        longitude: 0,
+        markers: [],
+        searchKey: '',
+        schoolList: [],
+        isShowSchoolMarkers: false
+      }
+    },
+    computed: {
+      ...mapState(['screenWidth', 'screenHeight']),
+    },
+    async onReady() {
+      this.initMapContext()
+    },
+    methods: {
+      initMapContext() {
+        this.mapContext = uni.createMapContext('zchMap', this)
+      },
+      fetchSchoolList() {
+        return new Promise((resolve) => {
+          uni.request({
+            url: 'https://www.zhchhong.shop/api/school/school-list',
+            method: 'GET',
+            success: ({
+              data
+            }) => {
+              this.schoolList = data
+              resolve()
+            }
+          })
+
+        })
+      },
+      handleChooseLocation() {
+        uni.chooseLocation({
+          success: (res) => {
+            uni.navigateTo({
+              url: '/pages/create/index?location=' + encodeURIComponent(JSON.stringify(res))
+            })
+          }
+        })
+      },
+      handleSchoolList() {
+        uni.navigateTo({
+          url: '/pages/school/index'
+        })
+      },
+      handleHomeLocation() {
+        this.mapContext.moveToLocation({
+          // latitudea: 39.9032,
+          // longitude: 116.398,
+          // destination: '天安门广场',
+          success: (res) => {
+            console.log(res)
+          },
+          fail: (reason) => {
+            console.log(reason)
+          }
+        })
+      },
+      handleCurrentLocation() {
+        uni.getLocation({
+          type: 'gcj02',
+          geocode: true,
+          success: (res) => {
+            this.latitude = res.latitude
+            this.longitude = res.longitude
+            this.markers = [...this.markers, {
+              id: 'currentLocation',
+              latitude: res.latitude,
+              longitude: res.longitude,
+              callout: {
+                content: '当前位置',
+                color: '#ff0000',
+                display: 'ALWAYS',
+                textAlign: 'center'
+              }
+            }]
+          },
+
+        })
+      },
+      async onShowSchoolMarkersChange(value) {
+        if (value) {
+          await this.fetchSchoolList()
+          this.markers = this.schoolList.map((item) => {
+            return {
+              id: item.uuid,
+              latitude: item.latitude,
+              longitude: item.longitude,
+              callout: {
+                content: item.name,
+                display: 'ALWAYS',
+                textAlign: 'center'
+              }
+            }
+          })
+        } else {
+          this.markers = []
+        }
+      }
+    }
+  }
+</script>
+<style lang="scss">
+  .fixed-icon {
+    position: fixed;
+    z-index: 1;
+
+  }
+
+  .search-icon {
+    top: 30px;
+    left: 20px;
+  }
+
+  .list-icon {
+    top: 30px;
+    right: 20px;
+  }
+
+  .home-icon {
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .location-icon {
+    right: 20px;
+    bottom: 20px;
+  }
+
+  .markers-switch {
+    left: 20px;
+    top: 300px;
+  }
+</style>

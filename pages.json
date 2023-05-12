@@ -1,0 +1,24 @@
+{
+  "pages": [{
+    "path": "pages/app",
+    "style": {
+      "navigationStyle": "custom"
+    }
+  }, {
+    "path": "pages/amap/index",
+    "style": {
+      "navigationStyle": "custom"
+    }
+  }, {
+    "path": "pages/create/index",
+    "style": {
+      "navigationStyle": "custom"
+    }
+  }, {
+    "path": "pages/school/index",
+    "style": {
+      "navigationStyle": "custom"
+    }
+
+  }]
+}
