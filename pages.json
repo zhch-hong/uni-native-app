@@ -19,6 +19,11 @@
     "style": {
       "navigationStyle": "custom"
     }
+  }, {
+    "path": "pages/domino-mall/index",
+    "style": {
+      "navigationStyle": "custom"
+    }
 
   }]
 }

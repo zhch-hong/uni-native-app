@@ -1,3 +1,6 @@
+<template>
+  <u-loading-page :loading="true" loading-text="加载中..." color="#333" :icon-size="30"></u-loading-page>
+</template>
 <script>
   export default {
     onLoad() {
@@ -5,9 +8,15 @@
         success: (sys) => {
           this.$store.commit('setScreenWidth', sys.screenWidth)
           this.$store.commit('setScreenHeight', sys.screenHeight)
-          uni.reLaunch({
-            url: '/pages/amap/index'
-          })
+          setTimeout(() => {
+
+            uni.reLaunch({
+              // url: '/pages/amap/index'
+
+              url: '/pages/domino-mall/index'
+            })
+          }, 2000)
+
         }
       })
     },

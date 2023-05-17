@@ -14,6 +14,7 @@
     "app-plus" : {
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
+        "screenOrientation" : "landscape-primary",
         "compilerVersion" : 3,
         "splashscreen" : {
             "alwaysShowBeforeRender" : false,
@@ -58,7 +59,8 @@
             },
             /* ios打包配置 */
             "ios" : {
-                "dSYMs" : false
+                "dSYMs" : false,
+                "idfa" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {
@@ -75,7 +77,8 @@
                 },
                 "ad" : {}
             }
-        }
+        },
+        "renderer" : "native"
     },
     /* 快应用特有相关 */
     "quickapp" : {},

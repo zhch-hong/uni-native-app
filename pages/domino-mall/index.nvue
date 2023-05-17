@@ -1,0 +1,17 @@
+<template>
+  <web-view src="https://www.zhchhong.shop" :style="'width:'+screenHeight+'px;height:'+screenWidth+'px;'"></web-view>
+</template>
+
+<script>
+  import {
+    mapState
+  } from 'vuex'
+
+  export default {
+
+    computed: {
+      ...mapState(['screenWidth', 'screenHeight']),
+    },
+
+  }
+</script>

@@ -2,6 +2,7 @@
   export default {
     onLaunch() {
       plus.navigator.setFullscreen(true)
+      plus.screen.lockOrientation('landscape-primary')
     }
   }
 </script>
