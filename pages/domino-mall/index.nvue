@@ -13,5 +13,30 @@
       ...mapState(['screenWidth', 'screenHeight']),
     },
 
+    onReady() {
+      // const webview = plus.webview.open('https://www.zhchhong.shop', 'zhchhong', {
+      //   width: this.screenHeight + 'px',
+      //   height: this.screenWidth + 'px'
+      // })
+      // webview.show()
+      // const allWebview=plus.webview.all()
+      // console.log(allWebview)
+      // const webview = this.$scope.$getAppWebview();
+      // console.log(webview.getURL())
+      // webview.overrideUrlLoading({
+      //   match: /^(.*)(baidu)(.*)$/
+      // }, (event) => {
+      //   console.log('event',event.url)
+        
+      // })
+
+      setTimeout(() => {
+        const webview=plus.webview.getTopWebview()
+        console.log(webview)
+        // console.log(webview.length,typeof webview[0].loadURL)
+        // webview[0].loadURL('https://www.baidu.com')
+      }, 5000)
+    }
+
   }
 </script>
